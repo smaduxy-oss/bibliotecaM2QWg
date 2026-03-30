@@ -1,18 +1,24 @@
 const express = require('express');
-const routes = require('./src/routes/index.routes');
-const app = express();
+const router = express.Router();
+const livrosRoutes = require('./src/routes/livros.routes');
+const usuariosRoutes = require('./src/routes/usuarios.routes');
 
-app.use(express.json());
+// 1. Rotas de Recursos (Coloque SEMPRE antes do 404)
+const {
+  autenticar, 
+  validarContentRype
+} = require ('./src/middlewares/main.middlewares')
 
-app.use((req, res, next) => {
-  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
-  next();
+// 2. Rota Raiz
+router.get('/', (req, res) => {
+  res.json({ sistema: 'Biblioteca Ralph & Teddy', status: 'Online' });
 });
 
-// Utilizando as rotas
-app.use(routes);
+router.use(autenticar);
+router.use(validarContentRype);
 
-const PORT = 3000;
-app.listen(PORT, () => {
-  console.log(`[SERVIDOR]: Biblioteca online em http://localhost:${PORT}`);
-});
+
+router.use('/livros', livrosRoutes);
+router.use('/usuarios', usuariosRoutes);
+
+module.exports = router;
