@@ -1,5 +1,5 @@
-const errorHandler = (err, req, res, next ) => {
-    console.error(`[ERRO] ${req.method} ${req.url}: `, err.message)
+const errorHandler = (err, req, res, next) => {
+    console.log(`ERRO: ${req.method} ${req.url}`, err.message);
 
     //determina o status - se o erro ja tem um status definidio, usa ele 
     //caso contrário, 500 é o padrão
